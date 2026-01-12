@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Outfit", sans-serif;
+  
+  --color-primary: #3b82f6;
+  --color-accent: #fbbf24;
+  --color-dark-bg: #0f172a;
+  --color-panel: rgba(30, 41, 59, 0.7);
+}
+
+@layer base {
+  body {
+    @apply bg-slate-950 text-slate-100 font-sans antialiased;
+    background-image: 
+      radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 40%),
+      radial-gradient(circle at 90% 80%, rgba(234, 179, 8, 0.1) 0%, transparent 40%);
+  }
+
+  /* Force dark inputs */
+  input[type="number"], input[type="text"] {
+    @apply bg-slate-800 border-slate-700 text-white rounded-md;
+  }
+  
+  /* Remove number spinners */
+  input[type=number]::-webkit-inner-spin-button, 
+  input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+  }
+}
+
+.glass-panel {
+  @apply bg-slate-900/60 backdrop-blur-md border border-slate-700/50 rounded-xl shadow-xl;
+}
+
+.btn-primary {
+  @apply bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-6 rounded-lg shadow-lg shadow-blue-500/30 transition-all active:scale-95;
+}
+
+.tab-active {
+  @apply bg-blue-500/10 text-blue-400 border-b-2 border-blue-500;
+}
+
+.tab-inactive {
+  @apply text-slate-400 hover:text-slate-200 hover:bg-white/5 border-b-2 border-transparent;
+}
