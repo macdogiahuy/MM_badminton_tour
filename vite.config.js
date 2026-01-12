@@ -8,6 +8,9 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
-  // Use relative base path to ensure assets load correctly regardless of the repository name/path
-  base: './',
+  base: '/MM_badminton_tour/',
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+  }
 })
