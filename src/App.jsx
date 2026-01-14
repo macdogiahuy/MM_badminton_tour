@@ -16,7 +16,11 @@ function App() {
         const newRes = { ...matchRes, [field]: value };
         
         // Auto-complete logic
-        if (newRes.score1 !== '' && newRes.score2 !== '') {
+        const hasStandardScore = newRes.score1 !== '' && newRes.score2 !== '' && newRes.score1 !== undefined && newRes.score2 !== undefined;
+        // Check if we have any set scores (simple check: if any field starting with 'score' is present)
+        const hasSetScores = Object.keys(newRes).some(k => k.startsWith('score') && newRes[k] !== '' && k !== 'score1' && k !== 'score2');
+        
+        if (hasStandardScore || hasSetScores) {
             newRes.complete = true;
         } else {
             newRes.complete = false;

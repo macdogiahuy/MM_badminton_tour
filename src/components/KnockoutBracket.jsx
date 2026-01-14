@@ -50,13 +50,53 @@ const KnockoutBracket = ({ category, groups, results, updateResults }) => {
 
     const getWinner = (match, t1, t2) => {
         const res = getMatchResult(match.id);
-        if (!res.complete) return null;
+        // Note: res.complete depends on generic generic check in App.jsx now
+        if (!res || !res.complete) return null;
+        
+        // BO3 Logic for Finals
+        if (match.title.includes('Chung Kết')) {
+             let wins1 = 0;
+             let wins2 = 0;
+             const sets = [1, 2, 3];
+             sets.forEach(i => {
+                 const s1 = parseInt(res[`score1_${i}`]);
+                 const s2 = parseInt(res[`score2_${i}`]);
+                 if (!isNaN(s1) && !isNaN(s2)) {
+                     if (s1 > s2) wins1++;
+                     if (s2 > s1) wins2++;
+                 }
+             });
+             if (wins1 >= 2) return t1;
+             if (wins2 >= 2) return t2;
+             return null; 
+        }
+
+        // Standard 1-set Logic
         return parseInt(res.score1) > parseInt(res.score2) ? t1 : t2;
     };
     
     const getLoser = (match, t1, t2) => {
         const res = getMatchResult(match.id);
-        if (!res.complete) return null;
+        if (!res || !res.complete) return null;
+
+        // BO3 Logic for Finals
+        if (match.title.includes('Chung Kết')) {
+             let wins1 = 0;
+             let wins2 = 0;
+             const sets = [1, 2, 3];
+             sets.forEach(i => {
+                 const s1 = parseInt(res[`score1_${i}`]);
+                 const s2 = parseInt(res[`score2_${i}`]);
+                 if (!isNaN(s1) && !isNaN(s2)) {
+                     if (s1 > s2) wins1++;
+                     if (s2 > s1) wins2++;
+                 }
+             });
+             if (wins1 >= 2) return t2;
+             if (wins2 >= 2) return t1;
+             return null;
+        }
+
         return parseInt(res.score1) > parseInt(res.score2) ? t2 : t1;
     };
 
@@ -114,16 +154,15 @@ const KnockoutBracket = ({ category, groups, results, updateResults }) => {
                             
                             return (
                                 <div key={match.id} className={`flex flex-col items-center ${isThirdPlace ? 'mt-8 opacity-90 scale-90' : ''}`}>
-                                    <BracketMatch 
-                                        matchId={match.id}
-                                        title={match.title}
-                                        team1={match.t1}
-                                        team2={match.t2}
-                                        score1={results[match.id]?.score1}
-                                        score2={results[match.id]?.score2}
-                                        onScoreChange={updateResults}
-                                        isFinal={isFinal}
-                                    />
+                    <BracketMatch 
+                        matchId={match.id}
+                        title={match.title}
+                        team1={match.t1}
+                        team2={match.t2}
+                        {...(results[match.id] || {})} 
+                        onScoreChange={updateResults}
+                        isFinal={isFinal}
+                    />
                                 </div>
                             );
                         })}
