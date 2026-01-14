@@ -122,13 +122,33 @@ const KnockoutBracket = ({ category, groups, results, updateResults }) => {
     bracketData = { rounds: [[final]] };
   }
 
+  // Define getWinner/getLoser helper in outer scope or reuse it
+  const getWinnerFn = (match, t1, t2) => {
+      const res = getMatchResult(match.id);
+      if (!res || !res.complete) return null;
+      
+      if (match.title.includes('Chung Kết')) {
+           let wins1 = 0;
+           let wins2 = 0;
+           const sets = [1, 2, 3];
+           sets.forEach(i => {
+               const s1 = parseInt(res[`score1_${i}`]);
+               const s2 = parseInt(res[`score2_${i}`]);
+               if (!isNaN(s1) && !isNaN(s2)) {
+                   if (s1 > s2) wins1++;
+                   if (s2 > s1) wins2++;
+               }
+           });
+           if (wins1 >= 2) return t1;
+           if (wins2 >= 2) return t2;
+           return null; 
+      }
+      return parseInt(res.score1) > parseInt(res.score2) ? t1 : t2;
+  };
+
   const champion = (() => {
       const finalMatch = bracketData.rounds[bracketData.rounds.length - 1][0];
-      const res = getMatchResult(finalMatch.id);
-      if(res.complete) {
-          return parseInt(res.score1) > parseInt(res.score2) ? finalMatch.t1 : finalMatch.t2;
-      }
-      return null;
+      return getWinnerFn(finalMatch, finalMatch.t1, finalMatch.t2);
   })();
 
   return (
