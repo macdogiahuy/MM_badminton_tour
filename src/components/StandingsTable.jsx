@@ -24,7 +24,7 @@ const StandingsTable = ({ branch, results }) => {
            </thead>
            <tbody className="divide-y divide-slate-700/50">
              {standings.map((team, idx) => {
-               const isQualifying = idx < 2; // Check rule: Top 2 advance
+               const isQualifying = idx < 1; // Check rule: Top 1 advance
                return (
                  <tr key={team.id} className={`transition-colors ${isQualifying ? 'bg-blue-500/5 hover:bg-blue-500/10' : 'hover:bg-slate-800/50'}`}>
                    <td className="py-4 px-4 pl-6">

@@ -37,18 +37,17 @@ const KnockoutBracket = ({ category, groups, results, updateResults }) => {
   let bracketData = {};
 
   if (category === 'advanced') {
-    // Round 1: Quarter Finals
-    // QF1: N1_1 vs N2_2
-    // QF2: N2_1 vs N1_2
-    // QF3: N3_1 vs N4_2
-    // QF4: N4_1 vs N3_2
+    // Advanced: 4 Groups -> 4 winners.
+    // Start at Semi-Finals directly.
+    // SF1: Winner N1 (0) vs Winner N2 (1)
+    // SF2: Winner N3 (2) vs Winner N4 (3)
     
-    const qf1 = { id: 'adv_qf1', t1: qualifiers[0]?.[0], t2: qualifiers[1]?.[1], title: 'QF1: Nhất N1 vs Nhì N2' };
-    const qf2 = { id: 'adv_qf2', t1: qualifiers[1]?.[0], t2: qualifiers[0]?.[1], title: 'QF2: Nhất N2 vs Nhì N1' };
-    const qf3 = { id: 'adv_qf3', t1: qualifiers[2]?.[0], t2: qualifiers[3]?.[1], title: 'QF3: Nhất N3 vs Nhì N4' };
-    const qf4 = { id: 'adv_qf4', t1: qualifiers[3]?.[0], t2: qualifiers[2]?.[1], title: 'QF4: Nhất N4 vs Nhì N3' };
+    // Note: Qualifiers array indices: 0->N1, 1->N2, 2->N3, 3->N4.
+    // We take [0] which is the 1st place (Winner).
+    
+    const sf1 = { id: 'adv_sf1', t1: qualifiers[0]?.[0], t2: qualifiers[1]?.[0], title: 'Bán Kết 1 (Nhất N1 vs Nhất N2)' };
+    const sf2 = { id: 'adv_sf2', t1: qualifiers[2]?.[0], t2: qualifiers[3]?.[0], title: 'Bán Kết 2 (Nhất N3 vs Nhất N4)' };
 
-    // Determine SF participants
     const getWinner = (match, t1, t2) => {
         const res = getMatchResult(match.id);
         if (!res.complete) return null;
@@ -60,15 +59,6 @@ const KnockoutBracket = ({ category, groups, results, updateResults }) => {
         if (!res.complete) return null;
         return parseInt(res.score1) > parseInt(res.score2) ? t2 : t1;
     };
-
-    const sf1_t1 = getWinner(qf1, qf1.t1, qf1.t2);
-    const sf1_t2 = getWinner(qf2, qf2.t1, qf2.t2);
-    
-    const sf2_t1 = getWinner(qf3, qf3.t1, qf3.t2);
-    const sf2_t2 = getWinner(qf4, qf4.t1, qf4.t2);
-
-    const sf1 = { id: 'adv_sf1', t1: sf1_t1, t2: sf1_t2, title: 'Bán Kết 1' };
-    const sf2 = { id: 'adv_sf2', t1: sf2_t1, t2: sf2_t2, title: 'Bán Kết 2' };
 
     // Final & 3rd Place
     const final_t1 = getWinner(sf1, sf1.t1, sf1.t2);
@@ -80,38 +70,16 @@ const KnockoutBracket = ({ category, groups, results, updateResults }) => {
     const final = { id: 'adv_final', t1: final_t1, t2: final_t2, title: 'Chung Kết' };
     const thirdPlace = { id: 'adv_3rd', t1: third_t1, t2: third_t2, title: 'Tranh Hạng 3' };
     
-    bracketData = { rounds: [[qf1, qf2, qf3, qf4], [sf1, sf2], [final, thirdPlace]] };
+    bracketData = { rounds: [[sf1, sf2], [final, thirdPlace]] };
 
   } else {
-    // Basic: 2 Groups
-    // SF1: N1_1 vs N2_2
-    // SF2: N2_1 vs N1_2
+    // Basic: 2 Groups -> 2 winners
+    // Start at Final directly.
+    // Final: Winner N1 (0) vs Winner N2 (1)
     
-    const sf1 = { id: 'bas_sf1', t1: qualifiers[0]?.[0], t2: qualifiers[1]?.[1], title: 'Bán Kết 1' };
-    const sf2 = { id: 'bas_sf2', t1: qualifiers[1]?.[0], t2: qualifiers[0]?.[1], title: 'Bán Kết 2' };
-
-    const getWinner = (match, t1, t2) => {
-        const res = getMatchResult(match.id);
-        if (!res.complete) return null;
-        return parseInt(res.score1) > parseInt(res.score2) ? t1 : t2;
-    };
+    const final = { id: 'bas_final', t1: qualifiers[0]?.[0], t2: qualifiers[1]?.[0], title: 'Chung Kết (Nhất N1 vs Nhất N2)' };
     
-    const getLoser = (match, t1, t2) => {
-        const res = getMatchResult(match.id);
-        if (!res.complete) return null;
-        return parseInt(res.score1) > parseInt(res.score2) ? t2 : t1;
-    };
-
-    const final_t1 = getWinner(sf1, sf1.t1, sf1.t2);
-    const final_t2 = getWinner(sf2, sf2.t1, sf2.t2);
-    
-    const third_t1 = getLoser(sf1, sf1.t1, sf1.t2);
-    const third_t2 = getLoser(sf2, sf2.t1, sf2.t2);
-    
-    const final = { id: 'bas_final', t1: final_t1, t2: final_t2, title: 'Chung Kết' };
-    const thirdPlace = { id: 'bas_3rd', t1: third_t1, t2: third_t2, title: 'Tranh Hạng 3' };
-    
-    bracketData = { rounds: [[sf1, sf2], [final, thirdPlace]] };
+    bracketData = { rounds: [[final]] };
   }
 
   const champion = (() => {
