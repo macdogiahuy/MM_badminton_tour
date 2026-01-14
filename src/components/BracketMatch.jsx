@@ -48,7 +48,7 @@ const BracketMatch = ({ title, team1, team2, score1, score2, onScoreChange, matc
        <div className={`border bg-slate-800/90 backdrop-blur shadow-2xl rounded-xl overflow-hidden relative group
             ${isFinal ? 'border-yellow-500 ring-4 ring-yellow-500/20' : 'border-slate-700/50 hover:border-blue-500/50'}
        `}>
-          {isFinal && <div className="absolute top-0 right-0 bg-gradient-to-l from-yellow-500 to-yellow-600 text-black text-[10px] font-bold px-2 py-0.5 rounded-bl shadow-sm">BO3 (11pts)</div>}
+          {isFinal && <div className="absolute top-0 right-0 bg-gradient-to-l from-yellow-500 to-yellow-600 text-black text-[10px] font-bold px-2 py-0.5 rounded-bl shadow-sm">BO3 (11)</div>}
           
           {/* Header for BO3 */}
           {isFinal && (
