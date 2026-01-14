@@ -24,8 +24,7 @@ const KnockoutBracket = ({ category, groups, results, updateResults }) => {
     // However, BracketMatch and the parent logic needs to pass the teams down.
     // A better approach: The hook/function calculating the bracket tree returns the participants.
     return { 
-        score1: res.score1, 
-        score2: res.score2,
+        ...res,
         complete: true
     };
   };
