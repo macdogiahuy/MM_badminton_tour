@@ -1,6 +1,7 @@
 {
   "name": "badminton-tour",
   "private": true,
+  "homepage": "https://macdogiahuy.github.io/MM_badminton_tour/",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
